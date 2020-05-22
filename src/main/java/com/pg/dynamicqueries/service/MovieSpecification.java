@@ -1,5 +1,8 @@
 package com.pg.dynamicqueries.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +39,8 @@ public class MovieSpecification implements Specification<Movie> {
 
 		//create a new predicate list
 		List<Predicate> predicates = new ArrayList<>();
+		
+		DateFormat format = new SimpleDateFormat("MM-dd-yyyy");
 
 		//add add criteria to predicates
 		for (SearchCriteria criteria : list) {
@@ -74,9 +79,15 @@ public class MovieSpecification implements Specification<Movie> {
 			} else if (criteria.getOperation().equals(SearchOperation.NOT_IN)) {
 				predicates.add(builder.not(root.get(criteria.getKey())).in(criteria.getValue()));
 			} else if(criteria.getOperation().equals(SearchOperation.BEFORE)) {
-				predicates.add(builder.lessThanOrEqualTo(root.<Date>get(criteria.getKey()), criteria.getDate()));
+				try {
+					predicates.add(builder.lessThanOrEqualTo(root.<Date>get(criteria.getKey()), format.parse(criteria.getValue().toString())));
+				} catch (ParseException e) {
+			}
 			} else if(criteria.getOperation().equals(SearchOperation.AFTER)) {
-				predicates.add(builder.greaterThanOrEqualTo(root.<Date>get(criteria.getKey()), criteria.getDate()));
+				try {
+					predicates.add(builder.greaterThanOrEqualTo(root.<Date>get(criteria.getKey()), format.parse(criteria.getValue().toString())));
+				} catch (ParseException e) {
+				}
 			}
 		}
 
