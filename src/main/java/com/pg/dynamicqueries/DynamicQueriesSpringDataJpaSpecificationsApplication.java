@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.pg.dynamicqueries.entity.Movie;
 import com.pg.dynamicqueries.repository.MovieRepository;
-import com.pg.dynamicqueries.service.MovieSpecification;
+import com.pg.dynamicqueries.service.GenericJpaSpecification;
 import com.pg.dynamicqueries.util.SearchCriteria;
 import com.pg.dynamicqueries.util.SearchOperation;
 
@@ -39,7 +39,7 @@ public class DynamicQueriesSpringDataJpaSpecificationsApplication {
             */
         	
             // search movies
-            MovieSpecification msTitleRating = new MovieSpecification();
+        	GenericJpaSpecification<Movie> msTitleRating = new GenericJpaSpecification<>();
             msTitleRating.add(new SearchCriteria("title", "", SearchOperation.MATCH));
             //msTitleRating.add(new SearchCriteria("rating", "9",SearchOperation.GREATER_THAN));
             msTitleRating.add(new SearchCriteria("releaseDate", "", SearchOperation.BEFORE));

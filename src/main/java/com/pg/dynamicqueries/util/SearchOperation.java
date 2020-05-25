@@ -7,6 +7,7 @@ public enum SearchOperation {
     LESS_THAN_EQUAL,
     NOT_EQUAL,
     EQUAL,
+    EQUALS_IGNORE_CASE,
     MATCH,
     MATCH_START,
     MATCH_END,

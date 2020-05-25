@@ -14,11 +14,10 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.pg.dynamicqueries.entity.Movie;
 import com.pg.dynamicqueries.util.SearchCriteria;
 import com.pg.dynamicqueries.util.SearchOperation;
 
-public class MovieSpecification implements Specification<Movie> {
+public class GenericJpaSpecification<E> implements Specification<E> {
 
 	/**
 	 * 
@@ -26,7 +25,7 @@ public class MovieSpecification implements Specification<Movie> {
 	private static final long serialVersionUID = -6574627686289373028L;
 	private List<SearchCriteria> list;
 
-	public MovieSpecification() {
+	public GenericJpaSpecification() {
 		this.list = new ArrayList<>();
 	}
 
@@ -35,7 +34,7 @@ public class MovieSpecification implements Specification<Movie> {
 	}
 
 	@Override
-	public Predicate toPredicate(Root<Movie> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+	public Predicate toPredicate(Root<E> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
 		//create a new predicate list
 		List<Predicate> predicates = new ArrayList<>();
@@ -60,6 +59,10 @@ public class MovieSpecification implements Specification<Movie> {
 				predicates.add(builder.notEqual(
 						root.get(criteria.getKey()), criteria.getValue()));
 			} else if (criteria.getOperation().equals(SearchOperation.EQUAL)) {
+				predicates.add(builder.equal(
+						builder.lower(root.get(criteria.getKey())),
+						criteria.getValue().toString().toLowerCase()));
+			} else if (criteria.getOperation().equals(SearchOperation.EQUALS_IGNORE_CASE)) {
 				predicates.add(builder.equal(
 						root.get(criteria.getKey()), criteria.getValue()));
 			} else if (criteria.getOperation().equals(SearchOperation.MATCH)) {
