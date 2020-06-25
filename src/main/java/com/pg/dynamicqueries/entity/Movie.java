@@ -19,11 +19,7 @@ import lombok.Setter;
 @Entity
 public class Movie implements Serializable {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1124157435918339171L;
-
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
